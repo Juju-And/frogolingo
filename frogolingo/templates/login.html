@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Panel logowania</h1>
+<form action="/login" method="post">
+
+    {% csrf_token %}
+    {{ form.as_p}}
+
+    <button type="submit">Zaloguj</button>
+</form>
+
+<a href="/create_user"><h3>Zarejestruj się</h3></a>
+
+
+{% endblock %}

@@ -15,7 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url
+
+from datasets.views import (MainView,
+                            AddNewExpressionView)
+from users.views import (LoginView,
+                         CreateUserView,
+                         logoutUser)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^$', MainView.as_view(), name="index"),
+    url(r'^login', LoginView.as_view()),
+    url(r'^logout', logoutUser),
+    url(r'^create_user', CreateUserView.as_view()),
+    url(r'^create_expression', AddNewExpressionView.as_view()),
+
 ]
