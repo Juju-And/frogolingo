@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views import View
 from django.views.generic import FormView, UpdateView, CreateView, ListView
 from datasets.forms import ExpressionForm
+import speech_recognition as sr
 
 
 # Create your views here.
@@ -15,13 +16,11 @@ class MainView(LoginRequiredMixin, View):
         return render(request, 'index.html', {})
 
 
-class AddNewExpressionView(LoginRequiredMixin, CreateView):
+class AddNewExpressionView(LoginRequiredMixin, View):
     login_url = '/login'
 
-    template_name = "add_expression.html"
-    form_class = ExpressionForm
-    success_url = "/"
+    def get(self, request):
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
+        # r = sr.Recognizer()
+        # r.recognize_google()
+        return render(request, 'add_expression.html', {})

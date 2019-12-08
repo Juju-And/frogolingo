@@ -33,3 +33,9 @@
 	color: #fff;
 	border-top: 20px solid #26d;
 }
+
+
+.hidden {
+    display: none;
+}
+

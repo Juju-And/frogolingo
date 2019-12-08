@@ -6,8 +6,15 @@
 
     {% csrf_token %}
     {{ form.as_p}}
-
+    <label>Wyrażenie w języku A: </label>
+    <input type="text" name="content">
+    <label>Audio: </label>
+    <input type="text" name="surname">
     <button type="submit">Dodaj</button>
+
+    <input type="button" id="recording" value="Start recording...">
+    <input type="button" id="play" class="hidden" value="Play recording...">
+
 </form>
 
 {% endblock %}
