@@ -1,5 +1,3 @@
-var audio = $('#audio');
-
 
 const recordAudio = () =>
   new Promise(async resolve => {
@@ -47,9 +45,7 @@ $(function() {
         else if(event.target.value == "Stop recording..."){
             recorder.stop().then((audio)=> recordedAudio = audio)
             event.target.value = "Start recording..."
-//            if ($('#play').hasClass("hidden")) {
                 $('#play').removeClass("hidden");
-//            }
             }
         })
         $('#play').on('click', function(event){

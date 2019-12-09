@@ -3,7 +3,7 @@ from datasets.models import Expression, Translation
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import View
 from django.views.generic import FormView, UpdateView, CreateView, ListView
-from datasets.forms import ExpressionForm
+from datasets.forms import ExpressionForm, UploadFileForm
 import speech_recognition as sr
 
 

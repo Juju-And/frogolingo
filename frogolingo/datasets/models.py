@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Expression(models.Model):
     content = models.CharField(max_length=100)
     image = models.CharField(max_length=256)
-    sound = models.CharField(max_length=256)
+    sound = models.FileField(max_length=256)
     creation_date = models.DateField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
