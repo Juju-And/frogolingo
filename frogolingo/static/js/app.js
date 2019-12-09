@@ -13,28 +13,28 @@ const recordAudio = () =>
                 audioChunks = []
                 mediaRecorder.start()
                 };
-    let audioUrl;
-    const stop = () =>
-      new Promise(resolve => {
-        mediaRecorder.addEventListener("stop", () => {
-          const audioBlob = new Blob(audioChunks,{type:'audio/x-mpeg-3'});
-          audioUrl = URL.createObjectURL(audioBlob);
-          const audio = new Audio(audioUrl);
-          const play = () => audio.play();
 
+const stop = () =>
+  new Promise(resolve => {
+    mediaRecorder.addEventListener("stop", () => {
+      let audioDownload = document.createElement("a");
+      const audioBlob = new Blob(audioChunks,{type:'audio/x-mpeg-3'});
+      audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      const play = () => audio.play();
+      resolve({ audioBlob, audioUrl, play, audioDownload});
 
+      audioDownload.href = audioUrl;
+      audioDownload.download = 'mp3';
+      audioDownload.innerHTML = 'download';
+      document.body.appendChild(audioDownload);
 
-          resolve({ audioBlob, audioUrl, play, audioDownload});
-        });
+    });
 
-        mediaRecorder.stop();
+    mediaRecorder.stop();
 
-        audioDownload.href = audioUrl;
-        audioDownload.download = 'mp3';
-        audioDownload.click()
-        window.URL.revokeObjectURL(audioUrl);
-        audioDownload.innerHTML = 'download';
-      });
+  });
+
 
     resolve({ start, stop });
   });
