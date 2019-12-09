@@ -6,25 +6,34 @@ const recordAudio = () =>
     var audioChunks = [];
 
     mediaRecorder.addEventListener("dataavailable", event => {
-      audioChunks.push(event.data);
+      audioChunks.push(event.data)
     });
 
     const start = () => {
                 audioChunks = []
                 mediaRecorder.start()
                 };
-
+    let audioUrl;
     const stop = () =>
       new Promise(resolve => {
         mediaRecorder.addEventListener("stop", () => {
-          const audioBlob = new Blob(audioChunks);
-          const audioUrl = URL.createObjectURL(audioBlob);
+          const audioBlob = new Blob(audioChunks,{type:'audio/x-mpeg-3'});
+          audioUrl = URL.createObjectURL(audioBlob);
           const audio = new Audio(audioUrl);
           const play = () => audio.play();
-          resolve({ audioBlob, audioUrl, play });
+
+
+
+          resolve({ audioBlob, audioUrl, play, audioDownload});
         });
 
         mediaRecorder.stop();
+
+        audioDownload.href = audioUrl;
+        audioDownload.download = 'mp3';
+        audioDownload.click()
+        window.URL.revokeObjectURL(audioUrl);
+        audioDownload.innerHTML = 'download';
       });
 
     resolve({ start, stop });
@@ -45,12 +54,17 @@ $(function() {
         else if(event.target.value == "Stop recording..."){
             recorder.stop().then((audio)=> recordedAudio = audio)
             event.target.value = "Start recording..."
-                $('#play').removeClass("hidden");
+                $('#play').removeClass("hidden")
+                $('#download').removeClass("hidden")
             }
         })
         $('#play').on('click', function(event){
             event.preventDefault();
             recordedAudio.play()
         })
-    })
+
+         $('#audioDownload').on('click', function(event){
+            event.preventDefault();
+            })
+        })
 })
