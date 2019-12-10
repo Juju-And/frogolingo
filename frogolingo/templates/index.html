@@ -3,22 +3,35 @@
 {% block title %} Strona główna {% endblock %}
 
 {% block content %}
+<h2>Ostatnio dodane słowa</h2>
+<table>
+    <tr>
+        <th>Słowo w języku A</th>
+        <th>Słowo w języku B</th>
+        <th>Obrazek</th>
+        <th>Audio</th>
+        <th>User</th>
+    </tr>
+    {% for expression in expressions %}
+        <tr>
+        <td>{{ expression.reference }}</td>
+        <td>{{ expression.translation }}</td>
+        <td>
+            <img src="media/{{ expression.image }}" alt="{{ expression.image }}" height="60">
 
-<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet, architecto blanditiis deserunt dolor
-    dolorem doloribus eaque eius eveniet ex facilis ipsum neque nisi obcaecati placeat ratione reiciendis tempore ullam.
-</div>
-<div>Autem eveniet id non possimus sint. A, beatae dignissimos dolores ducimus ea eligendi error eum fugit hic
-    laboriosam modi natus nulla odit possimus quis repellendus rerum sed similique soluta voluptas!
-</div>
-<div>Accusamus adipisci aperiam atque aut dolore ea enim eos esse eveniet fugiat id illo incidunt iste labore libero
-    maxime natus nihil optio quae quaerat quod rem, totam vero vitae voluptatum.
-</div>
-<div>Asperiores aspernatur deleniti deserunt distinctio dolores ea earum, eligendi esse est et fugiat in incidunt ipsam
-    laudantium minus molestias, necessitatibus nobis quis quisquam ratione reiciendis suscipit totam. Debitis
-    praesentium, voluptatum.
-</div>
+        </td>
+        <td>
+            <audio controls>
+            <source src="media/{{ expression.sound }}" type="audio/mpeg">
+            </audio>
+        </td>
+        <td>{{ expression.user }}</td>
 
 
+    </tr>
+    {% endfor %}
+
+</table>
 
 
 <!--<footer>-->

@@ -1,32 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<form action="/create_expression" method="post" enctype="multipart/form-data">
 <h1>Tworzenie nowego wyrażenia</h1>
-<form action="/create_expression" method="post">
-
     {% csrf_token %}
-    {{ form.as_p}}
+<!--    {{ form.as_p }}-->
     <label>Wyrażenie w języku A: </label>
-    <input type="text" name="content">
-    <label>Audio: </label>
-    <input type="text" name="surname">
-    <button type="submit">Dodaj</button>
-
+    {{ form.reference}}
+    <br><br>
+    <label>Wyrażenie w języku B: </label>
+    {{ form.translation}}
+    <br><br>
+    <label>Dodaj obrazek dla skojarzeń</label>
+    {{ form.image}}
+    <br><br>
+    <label>Nagraj audio: </label>
     <input type="button" id="recording" value="Start recording...">
     <input type="button" id="play" class="hidden" value="Play recording...">
-<!--    <a id=audioDownload target="_blank"></a>-->
-<!--    <input type="button" id=audioDownload class="hidden" value="Download recording...">-->
+    <br><br>
+    <label>Dodaj nagrany dźwięk</label>
+    {{ form.sound}}
 
+<!--    <input type="button" id="audioDownload" class="hidden">-->
 
-		<p class="hidden">
-			<audio id=recordedAudio></audio>
-		</p>
+    <br><br>
 
-
-
-
-
-
+    <button type="submit">Dodaj</button>
 </form>
+
 
 {% endblock %}

@@ -6,12 +6,13 @@ from datasets.models import Expression
 class ExpressionForm(forms.ModelForm):
     class Meta:
         model = Expression
-        fields = ['content', 'sound']
+        fields = ['reference', 'translation', 'image', 'sound',]
         labels = {
-            'content': 'Wyrażenie w języku A'
+            'reference': 'Wyrażenie w języku A',
+            'translation': 'Wyrażenie w języku B',
+            'sound': 'Dodaj nagrany dźwięk',
+            'image': 'Dodaj obrazek dla skojarzeń',
         }
 
 
-class UploadFileForm(forms.Form):
-    title = forms.CharField(max_length=50)
-    file = forms.FileField()
+

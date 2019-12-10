@@ -16,10 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
+
+from django.conf import settings
 from django.conf.urls.static import static
 
 from datasets.views import (MainView,
-                            AddNewExpressionView)
+                            AddNewExpressionView,
+                            AllExpressionView,
+                            AllAudioView,
+                            )
 from users.views import (LoginView,
                          CreateUserView,
                          logoutUser)
@@ -31,5 +36,11 @@ urlpatterns = [
     url(r'^logout', logoutUser),
     url(r'^create_user', CreateUserView.as_view()),
     url(r'^create_expression', AddNewExpressionView.as_view()),
+    url(r'^all_expressions', AllExpressionView.as_view()),
+    url(r'^all_audio', AllAudioView.as_view()),
+
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

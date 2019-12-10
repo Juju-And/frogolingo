@@ -25,7 +25,7 @@ const stop = () =>
       resolve({ audioBlob, audioUrl, play, audioDownload});
 
       audioDownload.href = audioUrl;
-      audioDownload.download = 'mp3';
+      audioDownload.download = audioUrl + '.mp3';
       audioDownload.innerHTML = 'download';
       document.body.appendChild(audioDownload);
 
@@ -38,6 +38,7 @@ const stop = () =>
 
     resolve({ start, stop });
   });
+
 
 
 $(function() {

@@ -6,16 +6,10 @@ from django.contrib.auth.models import User
 
 # Expression in foreign language
 class Expression(models.Model):
-    content = models.CharField(max_length=100)
-    image = models.CharField(max_length=256)
-    sound = models.FileField(max_length=256)
+    reference = models.CharField(max_length=100)
+    translation = models.CharField(max_length=100)
+    image = models.FileField(upload_to='images/')
+    sound = models.FileField(upload_to='sounds/')
     creation_date = models.DateField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-
-# Translation of the foreign expression
-class Translation(models.Model):
-    content = models.CharField(max_length=100)
-    reference = models.OneToOneField(Expression, on_delete=models.CASCADE)
-    creation_date = models.DateField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
