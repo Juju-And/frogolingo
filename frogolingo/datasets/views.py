@@ -1,33 +1,19 @@
 from django.shortcuts import render, redirect
-from datasets.models import Expression
-from django.http import JsonResponse
+from datasets.models import Expression, UserStats, UserAnswer
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import View
-from django.views.generic import FormView, ListView
+from django.views.generic import ListView
 from datasets.forms import ExpressionForm
 import speech_recognition as sr
+import json
 
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
-
-
-# Create your views here.
 
 class MainView(LoginRequiredMixin, View):
     login_url = '/login'
 
     def get(self, request):
-        # expressions = Expression.objects.all()
         expressions = Expression.objects.order_by('-id')[:10]
-        # last_ten_in_ascending_order = reversed(expressions)
         return render(request, 'index.html', {'expressions': expressions})
-
-
-# class AddNewExpressionView(LoginRequiredMixin, View):
-
-# def post(self, request):
-#     form = ExpressionForm(request.POST, request.FILES)
-#     return render(request, 'add_expression.html', {'form': form})
 
 
 class AddNewExpressionView(LoginRequiredMixin, View):
@@ -45,12 +31,35 @@ class AddNewExpressionView(LoginRequiredMixin, View):
         })
 
 
-class AllExpressionView(ListView):
-    pass
+class MessagesView(View):
+    def get(self, request):
+        return render(request, 'messages.html', {})
 
 
-class AllAudioView(FormView):
+class StatsView(View):
+    def get(self, request):
+        return render(request, 'stats.html', {})
+
+
+class TrainingView(View):
+    def get(self, request):
+        random_word = Expression.objects.order_by('?').first()
+        return render(request, 'training.html', {'random_word': random_word})
+
+    def post(self, request):
+        user = request.user
+        print(user.id)
+        data = json.loads(request.body)
+        expression_id = data['expression_id']
+        answer = data['answer']
+        UserAnswer.objects.create(
+            user=user,
+            expression_id=expression_id,
+            is_correct=answer,
+        )
+
+        return render(request, 'training.html', {})
+
+
+class AllExpressionView(View):
     pass
-#     template_name = "add_expression.html"
-# form_class = ExpressionForm
-# success_url = "/"

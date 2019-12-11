@@ -40,8 +40,31 @@ const stop = () =>
   });
 
 
+function saveAnswer(answer, expression_id) {
+    var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+    console.log("create post is working!") // sanity check
+//    console.log($('#product-name').val())
+        $.ajax({
+            url: "http://127.0.0.1:8000/training/",
+            data: JSON.stringify({'answer': answer,
+            'expression_id': expression_id}),
+            headers:{
+            "X-CSRFToken": csrftoken
+            },
+            type: "POST",
+            dataType: "json"
+        }).done(function(response) {
+            console.log('odpowiedź przesłana')
+        }).fail(function(xhr,status,err) {
+        }).always(function(xhr,status) {
+        });
+}
+
+
 
 $(function() {
+
     var recordedAudio;
       recordAudio().then((recorder)=>{
         $('#recording').on("click", function(event){
@@ -64,8 +87,32 @@ $(function() {
             recordedAudio.play()
         })
 
-         $('#audioDownload').on('click', function(event){
-            event.preventDefault();
-            })
+//         $('#audioDownload').on('click', function(event){
+//            event.preventDefault();
+//            })
+
+    })
+
+        $('#show_pic').click(function(){
+            console.log("kliknięty!")
+            $('#show_pic').addClass("hidden")
+            $('#hint').removeClass("hidden")
         })
+
+        $('#submit_answer').on('click', function(event){
+            event.preventDefault();
+            let answer
+            let expression_id
+            if ($('#reference').attr('data-translation') == $('#answer').val()) {
+                expression_id = $('#reference').attr('data-id')
+                answer = true
+                console.log('odpowiedź prawidłowa!')
+            } else {
+                answer = false
+                console.log('odpowiedź nieprawidłowa!')
+            }
+            saveAnswer(answer, expression_id);
+        })
+
+
 })

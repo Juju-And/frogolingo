@@ -23,7 +23,9 @@ from django.conf.urls.static import static
 from datasets.views import (MainView,
                             AddNewExpressionView,
                             AllExpressionView,
-                            AllAudioView,
+                            TrainingView,
+                            MessagesView,
+                            StatsView
                             )
 from users.views import (LoginView,
                          CreateUserView,
@@ -37,8 +39,9 @@ urlpatterns = [
     url(r'^create_user', CreateUserView.as_view()),
     url(r'^create_expression', AddNewExpressionView.as_view()),
     url(r'^all_expressions', AllExpressionView.as_view()),
-    url(r'^all_audio', AllAudioView.as_view()),
-
+    url(r'^training', TrainingView.as_view()),
+    url(r'^messages', MessagesView.as_view()),
+    url(r'^stats', StatsView.as_view()),
 
 ]
 
