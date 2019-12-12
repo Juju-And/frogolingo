@@ -41,16 +41,63 @@ class StatsView(LoginRequiredMixin, View):
         return render(request, 'stats.html', {})
 
 
+# user_answers
+#
+# expresion_id
+# is_correct
+# user_id
+#
+# 1, true, 1
+# 1, true, 1
+# 1, false, 1
+# 1, false, 1
+# 1, false, 1
+# 2, true, 1
+# 2, true, 1
+# 2, false, 1
+# 1, false, 2
+# 2, true, 2
+# 2, true, 2
+# 2, false, 2
+#
+#
+# a = select count(*) from user_answers where user_id = 1 and expression_id = 1
+# b = select count(*) from user_answers where user_id = 1 and expression_id = 1 and is_correct = true
+#
+# b / a * 100
+
+
 class TrainingView(LoginRequiredMixin, View):
     def get(self, request):
-        random_word = Expression.objects.order_by('?').first()
-        return render(request, 'training.html', {'random_word': random_word})
+        user = request.user
+        expressions = Expression.objects.all()
+        percentage = 0.0
+        worst_expression = Expression.objects.get(id=1)
+        for x in range(1, len(expressions)):
+            # Returns the total number of entries in the database.
+            a = UserAnswer.objects.filter(user=user).filter(expression_id=x).count()
+            # Returns the number of entries whose answer were correct
+            b = UserAnswer.objects.filter(user=user).filter(expression_id=x).filter(
+                is_correct=True).count()
+            if a != 0 and b != 0:
+                percentageAB = b / a * 100
+            else:
+                percentageAB = 0.0
+            print("a =", a, "b =", b, "procent =", percentageAB)
+            if percentageAB <= percentage:
+                worst_expression = Expression.objects.get(id=x)
+        # print(worst_id)
+        # print(percentage)
+        # print(worst_expression)
+
+        return render(request, 'training.html', {'random_word': worst_expression})
 
     def post(self, request):
         user = request.user
         print(user.id)
         data = json.loads(request.body)
         expression_id = data['expression_id']
+        print(expression_id)
         answer = data['answer']
         UserAnswer.objects.create(
             user=user,

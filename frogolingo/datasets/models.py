@@ -11,14 +11,6 @@ class Expression(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-class UserStats(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    correct_answers_reference_counter = models.IntegerField(default=0)
-    wrong_answers_reference_counter = models.IntegerField(default=0)
-    correct_answers_translation_counter = models.IntegerField(default=0)
-    wrong_answers_translation_counter = models.IntegerField(default=0)
-
-
 class UserAnswer(models.Model):
     expression = models.ForeignKey(Expression, on_delete=models.CASCADE)
     is_correct = models.BooleanField(default=False)
@@ -26,3 +18,9 @@ class UserAnswer(models.Model):
     datetime = models.DateTimeField(auto_now=True)
 
 
+class UserStats(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    correct_answers_reference_counter = models.IntegerField(default=0)
+    wrong_answers_reference_counter = models.IntegerField(default=0)
+    correct_answers_translation_counter = models.IntegerField(default=0)
+    wrong_answers_translation_counter = models.IntegerField(default=0)

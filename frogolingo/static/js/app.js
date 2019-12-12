@@ -26,9 +26,9 @@ const stop = () =>
 
 //      var file = new File([audioBlob], audioUrl+'.mp3')
       audioDownload.href = audioUrl;
-      audioDownload.download = audioUrl + '.mp3';
+      audioDownload.download = '/' + audioUrl + '.mp3';
 //      audioDownload.innerHTML = 'download';
-//      audioDownload.removeClass("hidden")
+      audioDownload.removeClass("hidden")
 //      document.body.appendChild(audioDownload);
 
     });
@@ -66,12 +66,15 @@ function saveAnswer(answer, expression_id) {
 
 
 $(function() {
+    console.log('dupa')
+    let a =  $('#audioDownload')
+    console.log(a)
+
     var recordedAudio;
       recordAudio().then((recorder)=>{
         $('#recording').on("click", function(event){
         event.preventDefault();
         console.log("kliknięty!")
-        $('#audioDownload').removeClass("hidden")
         if (event.target.value == "Start recording..."){
             recorder.start()
             event.target.value = "Stop recording..."
@@ -81,6 +84,7 @@ $(function() {
             recorder.stop().then((audio)=> recordedAudio = audio)
             event.target.value = "Start recording..."
                 $('#play').removeClass("hidden")
+//                $('#audioDownload').removeClass("hidden")
 
             }
         })
@@ -108,10 +112,11 @@ $(function() {
             if ($('#reference').attr('data-translation') == $('#answer').val()) {
                 expression_id = $('#reference').attr('data-id')
                 answer = true
-                console.log('odpowiedź prawidłowa!')
+//                console.log('odpowiedź prawidłowa!')
             } else {
                 answer = false
-                console.log('odpowiedź nieprawidłowa!')
+                expression_id = $('#reference').attr('data-id')
+//                console.log('odpowiedź nieprawidłowa!')
             }
             saveAnswer(answer, expression_id);
         })
