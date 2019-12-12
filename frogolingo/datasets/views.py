@@ -31,17 +31,17 @@ class AddNewExpressionView(LoginRequiredMixin, View):
         })
 
 
-class MessagesView(View):
+class MessagesView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'messages.html', {})
 
 
-class StatsView(View):
+class StatsView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'stats.html', {})
 
 
-class TrainingView(View):
+class TrainingView(LoginRequiredMixin, View):
     def get(self, request):
         random_word = Expression.objects.order_by('?').first()
         return render(request, 'training.html', {'random_word': random_word})
@@ -61,5 +61,5 @@ class TrainingView(View):
         return render(request, 'training.html', {})
 
 
-class AllExpressionView(View):
+class AllExpressionView(LoginRequiredMixin, View):
     pass
