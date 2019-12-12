@@ -112,11 +112,17 @@ $(function() {
             if ($('#reference').attr('data-translation') == $('#answer').val()) {
                 expression_id = $('#reference').attr('data-id')
                 answer = true
+                $('.correct_hide').addClass("hidden")
+                $('.correct_show').removeClass("hidden")
+                $('#answer').removeClass("error-field")
+                $('#answer').addClass("correct-field")
+
 //                console.log('odpowiedź prawidłowa!')
             } else {
                 answer = false
                 expression_id = $('#reference').attr('data-id')
 //                console.log('odpowiedź nieprawidłowa!')
+                $('#answer').addClass("error-field")
             }
             saveAnswer(answer, expression_id);
         })

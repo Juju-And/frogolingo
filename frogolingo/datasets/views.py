@@ -66,26 +66,29 @@ class StatsView(LoginRequiredMixin, View):
 #
 # b / a * 100
 
+# def selectWorstExpressions(user, )
+
 
 class TrainingView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         expressions = Expression.objects.all()
         percentage = 0.0
-        worst_expression = Expression.objects.get(id=1)
+        worst_expression = expressions[0]
         for x in range(1, len(expressions)):
             # Returns the total number of entries in the database.
-            a = UserAnswer.objects.filter(user=user).filter(expression_id=x).count()
+            a = UserAnswer.objects.filter(user=user).filter(expression_id=expressions[x].id).count()
             # Returns the number of entries whose answer were correct
-            b = UserAnswer.objects.filter(user=user).filter(expression_id=x).filter(
+            b = UserAnswer.objects.filter(user=user).filter(expression_id=expressions[x].id).filter(
                 is_correct=True).count()
             if a != 0 and b != 0:
                 percentageAB = b / a * 100
             else:
                 percentageAB = 0.0
             print("a =", a, "b =", b, "procent =", percentageAB)
+
             if percentageAB <= percentage:
-                worst_expression = Expression.objects.get(id=x)
+                worst_expression = expressions[x]
         # print(worst_id)
         # print(percentage)
         # print(worst_expression)
@@ -94,10 +97,10 @@ class TrainingView(LoginRequiredMixin, View):
 
     def post(self, request):
         user = request.user
-        print(user.id)
+        # print(user.id)
         data = json.loads(request.body)
         expression_id = data['expression_id']
-        print(expression_id)
+        # print(expression_id)
         answer = data['answer']
         UserAnswer.objects.create(
             user=user,
@@ -106,6 +109,11 @@ class TrainingView(LoginRequiredMixin, View):
         )
 
         return render(request, 'training.html', {})
+
+
+class LearningView(View):
+    def get(self, request):
+        pass
 
 
 class AllExpressionView(LoginRequiredMixin, View):

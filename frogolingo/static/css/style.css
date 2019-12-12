@@ -57,3 +57,11 @@ th, td {
   margin-right: auto;
   width: 50%;
 }
+
+.error-field {
+    background: #ff6666;
+}
+
+.correct-field {
+    background: #66ff68;
+}
