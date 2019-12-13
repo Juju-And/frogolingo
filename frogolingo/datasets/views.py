@@ -1,3 +1,5 @@
+from multiprocessing.reduction import register
+
 from django.shortcuts import render, redirect
 from datasets.models import Expression, UserStats, UserAnswer
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -6,6 +8,7 @@ from django.views.generic import ListView
 from datasets.forms import ExpressionForm
 import speech_recognition as sr
 import json
+import random
 
 
 class MainView(LoginRequiredMixin, View):
@@ -36,11 +39,6 @@ class MessagesView(LoginRequiredMixin, View):
         return render(request, 'messages.html', {})
 
 
-class StatsView(LoginRequiredMixin, View):
-    def get(self, request):
-        return render(request, 'stats.html', {})
-
-
 # user_answers
 #
 # expresion_id
@@ -66,34 +64,44 @@ class StatsView(LoginRequiredMixin, View):
 #
 # b / a * 100
 
-# def selectWorstExpressions(user, )
+def selectWorstExpressions(user):
+    expressions = Expression.objects.all()
+    percentage = 100.0
+    worst_expression = expressions[0]
+    expressions_list = []
+    for x in range(0, len(expressions)):
+        # Returns the total number of entries in the database.
+        a = UserAnswer.objects.filter(user=user).filter(expression_id=expressions[x].id).count()
+        # Returns the number of entries whose answer were correct
+        b = UserAnswer.objects.filter(user=user).filter(expression_id=expressions[x].id).filter(
+            is_correct=True).count()
+        if a != 0 and b != 0:
+            percentageAB = b / a * 100
+        else:
+            percentageAB = 0.0
+        print("a =", a, "b =", b, "procent =", percentageAB)
+
+        expressions_list.append({"percentage": percentageAB, "expression": expressions[x]})
+        expressions_list.sort(key=lambda x: x['percentage'])
+
+        # if percentageAB <= percentage:
+        # percentage = percentageAB
+        # worst_expression = expressions[x]
+    # print(worst_id)
+    # print(percentage)
+    # print(worst_expression)
+    # print(random.choice(expressions_list[0:5]))
+
+    return expressions_list
 
 
 class TrainingView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
-        expressions = Expression.objects.all()
-        percentage = 0.0
-        worst_expression = expressions[0]
-        for x in range(1, len(expressions)):
-            # Returns the total number of entries in the database.
-            a = UserAnswer.objects.filter(user=user).filter(expression_id=expressions[x].id).count()
-            # Returns the number of entries whose answer were correct
-            b = UserAnswer.objects.filter(user=user).filter(expression_id=expressions[x].id).filter(
-                is_correct=True).count()
-            if a != 0 and b != 0:
-                percentageAB = b / a * 100
-            else:
-                percentageAB = 0.0
-            print("a =", a, "b =", b, "procent =", percentageAB)
+        expressions_list = selectWorstExpressions(user)
+        random_word = (random.choice(expressions_list[0:5]))['expression']
 
-            if percentageAB <= percentage:
-                worst_expression = expressions[x]
-        # print(worst_id)
-        # print(percentage)
-        # print(worst_expression)
-
-        return render(request, 'training.html', {'random_word': worst_expression})
+        return render(request, 'training.html', {'random_word': random_word})
 
     def post(self, request):
         user = request.user
@@ -107,13 +115,25 @@ class TrainingView(LoginRequiredMixin, View):
             expression_id=expression_id,
             is_correct=answer,
         )
-
-        return render(request, 'training.html', {})
+        return redirect('/training')
+        # return render(request, 'training.html', {})
 
 
 class LearningView(View):
     def get(self, request):
-        pass
+        user = request.user
+        expressions_list = selectWorstExpressions(user)
+        random_word = (random.choice(expressions_list))['expression']
+
+        return render(request, 'learning.html', {'random_word': random_word})
+
+
+
+class StatsView(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user
+        expressions_list = selectWorstExpressions(user)
+        return render(request, 'stats.html', {'expressions_list': expressions_list})
 
 
 class AllExpressionView(LoginRequiredMixin, View):

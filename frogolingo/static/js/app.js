@@ -126,6 +126,14 @@ $(function() {
             }
             saveAnswer(answer, expression_id);
         })
+        $('#next_expression_train').click(function(){
+            window.location.href='/training';
+            return false;
+        })
 
+        $('#next_expression_learn').click(function(){
+            window.location.href='/learn';
+            return false;
+        })
 
 })

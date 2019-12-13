@@ -3,9 +3,21 @@
 {% block content %}
 <h1>Statystyki</h1>
 
-<!--losowe słowo w języku B-->
-<img src="static/images/under-construction-150271_960_720.png" alt="under_construction" class="center">
+<ul>
+    {% for expression in expressions_list %}
+    <li>
+        {% for key, value in expression.items %}
+            {% if key == 'percentage' %}
 
+                Procent : {{ value }}
 
+            {% elif key == 'expression' %}
+                Wyrażenie : {{ value.reference }}
+
+            {% endif %}
+        {% endfor %}
+    </li>
+    {% endfor %}
+</ul>
 
 {% endblock %}
