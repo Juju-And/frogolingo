@@ -133,6 +133,7 @@ class StatsView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         expressions_list = selectWorstExpressions(user)
+        expressions_list.sort(key=lambda x: x['percentage'], reverse=True)
         return render(request, 'stats.html', {'expressions_list': expressions_list})
 
 

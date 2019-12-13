@@ -3,21 +3,24 @@
 {% block content %}
 <h1>Statystyki</h1>
 
-<ul>
+<table>
+    <th>Średni wynik dla wyrażenia</th>
+    <th>Wyrażenie</th>
     {% for expression in expressions_list %}
-    <li>
+    <tr>
         {% for key, value in expression.items %}
-            {% if key == 'percentage' %}
-
-                Procent : {{ value }}
-
-            {% elif key == 'expression' %}
-                Wyrażenie : {{ value.reference }}
-
-            {% endif %}
+        {% if key == 'percentage' %}
+        <td>
+            {{ value }}
+        </td>
+        {% elif key == 'expression' %}
+        <td>
+            {{ value.reference }}
+        </td>
+        {% endif %}
         {% endfor %}
-    </li>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 
 {% endblock %}
