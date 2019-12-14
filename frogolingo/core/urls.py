@@ -22,11 +22,12 @@ from django.conf.urls.static import static
 
 from datasets.views import (MainView,
                             AddNewExpressionView,
-                            TrainingView,
                             MessagesView,
                             StatsView,
-                            LearningView,
                             AllExpressionsView,
+                            )
+from learning.views import (TrainingView,
+                            LearningView,
                             NextExpressionsView
                             )
 from users.views import (LoginView,
