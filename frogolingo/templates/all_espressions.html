@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Tworzenie nowego wyrażenia</h1>
+
+    <table>
+        <th>№</th>
+        <th>Wyrażenie w języku A</th>
+        <th>Wyrażenie w języku B</th>
+        <th>Obrazek</th>
+        <th>-</th>
+        {% for expression in expressions_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ expression.reference }}</td>
+            <td>{{ expression.translation }}</td>
+            <td><img src="/media/{{ expression.image }}" alt="{{ expression.image }}" height="150" id="hint"></td>
+            <td>Edytuj</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock %}

@@ -5,15 +5,15 @@
 {% csrf_token %}
 
 <!--losowe słowo w języku B-->
-<h2>{{random_word.reference}}</h2>
-<h3 data-id="{{random_word.id}}">{{random_word.translation}}</h3>
-<audio controls>
-    <source src="/media/{{ random_word.sound }}" type="audio/mpeg">
-</audio>
-<br><br>
 
-<br><br>
-<img src="/media/{{ random_word.image }}" alt="{{ random_word.image }}" height="150" id="hint">
+
+
+
+<div id="next-expression">{% include 'next_expression_learn.html' %}</div>
+
+
+
+
 <br><br>
 <button type="submit" id="next_expression_learn">Następne</button>
 

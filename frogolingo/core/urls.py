@@ -22,11 +22,12 @@ from django.conf.urls.static import static
 
 from datasets.views import (MainView,
                             AddNewExpressionView,
-                            AllExpressionView,
                             TrainingView,
                             MessagesView,
                             StatsView,
-                            LearningView
+                            LearningView,
+                            AllExpressionsView,
+                            NextExpressionsView
                             )
 from users.views import (LoginView,
                          CreateUserView,
@@ -39,11 +40,12 @@ urlpatterns = [
     url(r'^logout', logoutUser),
     url(r'^create_user', CreateUserView.as_view()),
     url(r'^create_expression', AddNewExpressionView.as_view()),
-    url(r'^all_expressions', AllExpressionView.as_view()),
     url(r'^learn', LearningView.as_view()),
     url(r'^training', TrainingView.as_view()),
     url(r'^messages', MessagesView.as_view()),
     url(r'^stats', StatsView.as_view()),
+    url(r'^all_expressions', AllExpressionsView.as_view()),
+    url(r'^next_expression', NextExpressionsView.as_view()),
 
 ]
 

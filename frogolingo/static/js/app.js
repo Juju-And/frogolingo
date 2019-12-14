@@ -64,6 +64,21 @@ function saveAnswer(answer, expression_id) {
 }
 
 
+function nextExpression() {
+
+    console.log("create post is working!") // sanity check
+//    console.log($('#product-name').val())
+        $.ajax({
+            url: "http://127.0.0.1:8000/next_expression/",
+            type: "GET",
+        }).done(function(response) {
+          var div = $("#next-expression")
+          div.html(response)
+            console.log('odpowiedź przesłana')
+        }).fail(function(xhr,status,err) {
+        }).always(function(xhr,status) {
+        });
+}
 
 $(function() {
     console.log('dupa')
@@ -127,13 +142,11 @@ $(function() {
             saveAnswer(answer, expression_id);
         })
         $('#next_expression_train').click(function(){
-            window.location.href='/training';
-            return false;
+            nextExpression()
         })
 
         $('#next_expression_learn').click(function(){
-            window.location.href='/learn';
-            return false;
+            nextExpression()
         })
 
 })

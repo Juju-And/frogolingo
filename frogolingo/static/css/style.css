@@ -65,3 +65,15 @@ th, td {
 .correct-field {
     background: #66ff68;
 }
+
+.perfect {
+    background: #32CD32;
+}
+
+.notbad {
+    background: #FFD700;
+}
+
+.critical {
+    background: #DC143C;
+}

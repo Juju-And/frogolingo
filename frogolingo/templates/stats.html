@@ -4,19 +4,32 @@
 <h1>Statystyki</h1>
 
 <table>
-    <th>Średni wynik dla wyrażenia</th>
     <th>Wyrażenie</th>
+    <th>Średni wynik dla wyrażenia</th>
+    <th>Ilość poprawnych odpowiedzi</th>
+    <th>Ilość wszystkich odpowiedzi</th>
+
     {% for expression in expressions_list %}
-    <tr>
+
+       <tr class="{{ expression.status_color }}">
         {% for key, value in expression.items %}
-        {% if key == 'percentage' %}
-        <td>
-            {{ value }}
-        </td>
-        {% elif key == 'expression' %}
+        {% if key == 'expression' %}
         <td>
             {{ value.reference }}
         </td>
+        {% elif key == 'percentage' %}
+        <td>
+            {{ value }}
+        </td>
+        {% elif key == 'correct_answers' %}
+        <td>
+            {{ value }}
+        </td>
+                {% elif key == 'all_answers' %}
+        <td>
+            {{ value }}
+        </td>
+
         {% endif %}
         {% endfor %}
     </tr>

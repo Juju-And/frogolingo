@@ -67,7 +67,7 @@ class MessagesView(LoginRequiredMixin, View):
 def selectWorstExpressions(user):
     expressions = Expression.objects.all()
     percentage = 100.0
-    worst_expression = expressions[0]
+    # worst_expression = expressions[0]
     expressions_list = []
     for x in range(0, len(expressions)):
         # Returns the total number of entries in the database.
@@ -76,12 +76,23 @@ def selectWorstExpressions(user):
         b = UserAnswer.objects.filter(user=user).filter(expression_id=expressions[x].id).filter(
             is_correct=True).count()
         if a != 0 and b != 0:
-            percentageAB = b / a * 100
+            percentageAB = round(b / a * 100, 2)
         else:
             percentageAB = 0.0
         print("a =", a, "b =", b, "procent =", percentageAB)
 
-        expressions_list.append({"percentage": percentageAB, "expression": expressions[x]})
+        if percentageAB > 90:
+            color = "perfect"
+        elif percentageAB > 50:
+            color = "notbad"
+        else:
+            color = "critical"
+
+        expressions_list.append({"expression": expressions[x],
+                                 "percentage": percentageAB,
+                                 "correct_answers": b,
+                                 "all_answers": a,
+                                 "status_color": color})
         expressions_list.sort(key=lambda x: x['percentage'])
 
         # if percentageAB <= percentage:
@@ -128,6 +139,15 @@ class LearningView(View):
         return render(request, 'learning.html', {'random_word': random_word})
 
 
+class NextExpressionsView(View):
+    def get(self, request):
+        user = request.user
+        expressions_list = selectWorstExpressions(user)
+        random_word = (random.choice(expressions_list))['expression']
+        return render(request, 'next_expression_learn.html', {'random_word': random_word})
+
+
+
 
 class StatsView(LoginRequiredMixin, View):
     def get(self, request):
@@ -137,5 +157,8 @@ class StatsView(LoginRequiredMixin, View):
         return render(request, 'stats.html', {'expressions_list': expressions_list})
 
 
-class AllExpressionView(LoginRequiredMixin, View):
-    pass
+class AllExpressionsView(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user
+        expressions_list = Expression.objects.filter(user=user)
+        return render(request, 'all_espressions.html', {'expressions_list': expressions_list})
