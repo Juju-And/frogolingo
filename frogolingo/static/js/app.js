@@ -64,8 +64,7 @@ function saveAnswer(answer, expression_id) {
 }
 
 
-function nextExpression() {
-
+function nextExpressionLearn() {
     console.log("create post is working!") // sanity check
 //    console.log($('#product-name').val())
         $.ajax({
@@ -73,6 +72,21 @@ function nextExpression() {
             type: "GET",
         }).done(function(response) {
           var div = $("#next-expression")
+          div.html(response)
+            console.log('odpowiedź przesłana')
+        }).fail(function(xhr,status,err) {
+        }).always(function(xhr,status) {
+        });
+}
+
+function nextExpressionTrain() {
+    console.log("create post is working!") // sanity check
+//    console.log($('#product-name').val())
+        $.ajax({
+            url: "http://127.0.0.1:8000/next_expression/",
+            type: "GET",
+        }).done(function(response) {
+          var div = $("#next-expression-train")
           div.html(response)
             console.log('odpowiedź przesłana')
         }).fail(function(xhr,status,err) {
@@ -142,11 +156,11 @@ $(function() {
             saveAnswer(answer, expression_id);
         })
         $('#next_expression_train').click(function(){
-            nextExpression()
+            nextExpressionTrain()
         })
 
         $('#next_expression_learn').click(function(){
-            nextExpression()
+            nextExpressionLearn()
         })
 
 })

@@ -6,18 +6,10 @@
 
 <!--losowe słowo w języku B-->
 <h2>Co oznacza słowo:</h2>
-<h3 data-translation="{{random_word.translation}}" data-id="{{random_word.id}}" id="reference">{{random_word.reference}}</h3>
-<audio controls>
-    <source src="/media/{{ random_word.sound }}" type="audio/mpeg">
-</audio>
-<br><br>
 
-<label>Odpowiedź:</label>
-<input type="text" id="answer">
-<br><br>
-<button id="show_pic" class="correct_hide">Pokaż podpowiedź...</button>
-<img src="/media/{{ random_word.image }}" alt="{{ random_word.image }}" height="150" id="hint" class="hidden correct_show">
-<br><br>
+<div id="next-expression-train">{% include 'next_expression_train.html' %}</div>
+
+
 <button type="submit" id="submit_answer" class="correct_hide">Sprawdź</button>
 <button type="submit" id="next_expression_train" class="hidden correct_show">Następne</button>
 

@@ -147,8 +147,6 @@ class NextExpressionsView(View):
         return render(request, 'next_expression_learn.html', {'random_word': random_word})
 
 
-
-
 class StatsView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
