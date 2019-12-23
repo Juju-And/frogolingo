@@ -22,9 +22,11 @@ from django.conf.urls.static import static
 
 from datasets.views import (MainView,
                             AddNewExpressionView,
+                            DeleteExpressionView,
                             MessagesView,
                             StatsView,
                             AllExpressionsView,
+                            EditExpressionView
                             )
 from learning.views import (TrainingView,
                             LearningView,
@@ -41,12 +43,14 @@ urlpatterns = [
     url(r'^logout', logoutUser),
     url(r'^create_user', CreateUserView.as_view()),
     url(r'^create_expression', AddNewExpressionView.as_view()),
+    url(r'^delete_expression/(?P<expression_id>(\d)+)$', DeleteExpressionView.as_view()),
     url(r'^learn', LearningView.as_view()),
     url(r'^training', TrainingView.as_view()),
     url(r'^messages', MessagesView.as_view()),
     url(r'^stats', StatsView.as_view()),
     url(r'^all_expressions', AllExpressionsView.as_view()),
     url(r'^next_expression', NextExpressionsView.as_view()),
+    url(r'^edit_expression/(?P<pk>(\d)+)$', EditExpressionView.as_view()),
 
 ]
 

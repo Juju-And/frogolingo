@@ -22,11 +22,12 @@ const stop = () =>
       audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
       const play = () => audio.play();
+      audioDownload.attr('href', audioUrl);
       resolve({ audioBlob, audioUrl, play, audioDownload});
 
 //      var file = new File([audioBlob], audioUrl+'.mp3')
-      audioDownload.href = audioUrl;
-      audioDownload.download = '/' + audioUrl + '.mp3';
+
+      audioDownload.download = audioUrl + '.mp3';
 //      audioDownload.innerHTML = 'download';
       audioDownload.removeClass("hidden")
 //      document.body.appendChild(audioDownload);
@@ -80,11 +81,17 @@ function nextExpressionLearn() {
 }
 
 function nextExpressionTrain() {
-    console.log("create post is working!") // sanity check
+        console.log("create post is working!") // sanity check
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
 //    console.log($('#product-name').val())
         $.ajax({
             url: "http://127.0.0.1:8000/next_expression/",
-            type: "GET",
+            type: "POST",
+            headers:{
+            "X-CSRFToken": csrftoken
+            },
+            dataType: "json"
         }).done(function(response) {
           var div = $("#next-expression-train")
           div.html(response)
@@ -94,11 +101,43 @@ function nextExpressionTrain() {
         });
 }
 
-$(function() {
-    console.log('dupa')
-    let a =  $('#audioDownload')
-    console.log(a)
 
+function getExpressions(expression) {
+        var url = "http://127.0.0.1:8000/all_expressions/"
+        $.ajax({
+            url: url,
+            data: JSON.stringify({'expression': expression}),
+            type: "GET",
+        }).done(function(response) {
+            console.log('odpowiedź przesłana')
+        }).fail(function(xhr,status,err) {
+        }).always(function(xhr,status) {
+        });
+
+}
+
+function deleteExpression(url) {
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+            url: url,
+            headers:{
+            "X-CSRFToken": csrftoken
+            },
+            data: {},
+            type: "DELETE",
+            dataType: "json"
+        }).done(function(response) {
+            window.location.reload()
+        }).fail(function(xhr,status,err) {
+            console.error("err")
+        }).always(function(xhr,status) {
+        });
+}
+
+
+
+
+$(function() {
     var recordedAudio;
       recordAudio().then((recorder)=>{
         $('#recording').on("click", function(event){
@@ -162,5 +201,37 @@ $(function() {
         $('#next_expression_learn').click(function(){
             nextExpressionLearn()
         })
+
+
+        $('#btn-show-expression').click(function() {
+            var expression = $('#input-show-expression').val()
+//          console.log(expression)
+            getExpressions(expression);
+        })
+
+        $('#btn-edit').click(function(){
+            var x = $(event.target);
+            var expression_id = x.attr('data-id');
+            console.log(x, expression_id)
+        })
+
+        //        // Usuwanie pojedyńczego wydatku
+        $('body').on("click", '.btn-delete', function(event){
+            event.preventDefault()
+            // łapię kliknięty element
+            var x = $(event.target);
+            // łapię rodzica klikniętego elementu i jego id
+            var expression_id = x.attr('data-id');
+            var expression_href = x.attr('href');
+            if (expression_href !== undefined && confirm("Serio?")){
+                deleteExpression(expression_href)
+            }
+
+
+
+//            console.log(productId) // sanity check
+        })
+
+
 
 })

@@ -1,24 +1,92 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Lista wszystkich dodanych przez Ciebie wyrażeń</h1>
-<br>
-<input id="input-show-expression" type="text">
-<input id="btn-show-expression" class="input-button" type="submit" value="Szukaj">
+
+
+<a class="btn btn-success" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false"
+   aria-controls="multiCollapseExample1">Tworzenie nowego wyrażenia</a>
+
+<div class="row">
+    <div class="col">
+        <div class="collapse multi-collapse" id="multiCollapseExample1">
+            <div class="card card-body">
+                <form action="/create_expression" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!--    {{ form.as_p }}-->
+                    <label>Wyrażenie w języku A: </label>
+                    {{ form.reference}}
+                    <br><br>
+                    <label>Wyrażenie w języku B: </label>
+                    {{ form.translation}}
+                    <br><br>
+                    <label>Dodaj obrazek dla skojarzeń</label>
+                    {{ form.image}}
+                    <br>
+                    <label>Nagraj audio: </label>
+                    <input type="button" class="btn btn-outline-success" id="recording" value="Start recording...">
+                    <input type="button" id="play" class="hidden btn btn-outline-success" value="Play recording...">
+                    <a href="#" id="audioDownload" class="hidden btn btn-outline-success">Download</a>
+                    <br><br>
+                    <label>Dodaj nagrany dźwięk</label>
+                    {{ form.sound }}
+
+                    <!--    <input type="button" id="audioDownload" class="hidden">-->
+
+                    <br>
+
+                    <button type="submit" class="btn btn-outline-success">Dodaj</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <br><br>
-<table>
+<h3>Lista wszystkich dodanych przez Ciebie wyrażeń</h3>
+<br>
+<form action="">
+    <input name="expression" id="input-show-expression" type="text">
+    <input id="btn-show-expression " class="input-button" type="submit" value="Szukaj">
+</form>
+
+
+<br><br>
+
+<table class="table table-striped">
     <th>№</th>
-    <th>Wyrażenie w języku A</th>
-    <th>Wyrażenie w języku B</th>
+    <th>
+        Wyrażenie w języku A
+        <br>
+        <a href="?order_by=reference" id="alph-langA">а-я</a>
+    </th>
+    <th>Wyrażenie w języku B
+        <br>
+        <a href="?order_by=translation" id="alph-langB">a-z</a>
+    </th>
     <th>Obrazek</th>
+    <th>Audio</th>
     <th>-</th>
     {% for expression in expressions_list %}
     <tr>
         <td>{{ forloop.counter }}</td>
         <td>{{ expression.reference }}</td>
         <td>{{ expression.translation }}</td>
-        <td><img src="/media/{{ expression.image }}" alt="{{ expression.image }}" height="150" id="hint"></td>
-        <td>Edytuj</td>
+        <td>
+            <img src="/media/{{ expression.image }}" alt="{{ expression.image }}" height="150" id="hint">
+        </td>
+        <td>
+            <audio controls>
+                <source src="/media/{{ expression.sound }}" type="audio/mpeg">
+            </audio>
+        </td>
+        <td>
+            <a href='/edit_expression/{{ expression.id }}' data-id="{{ expression.id }}"
+               class="btn-edit btn btn-outline-success">Edytuj</a>
+            <br><br>
+            <a href="/delete_expression/{{ expression.id }}" data-id="{{ expression.id }}"
+               class="btn-delete btn btn-outline-success">Usuń</a>
+        </td>
     </tr>
     {% endfor %}
 </table>

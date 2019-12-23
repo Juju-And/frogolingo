@@ -1,10 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+<h1>Edycja wyrażenia:</h1>
+<br>
+
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label><b>Wyrażenie w języku A:</b> </label>
+    {{ form.reference}}
+    <br><br>
+    <label><b>Wyrażenie w języku B:</b> </label>
+    {{ form.translation}}
+    <br><br>
+
+        <label>Obecnie dodany obraz:</label>
+    <br>
+    <img src="{{form.instance.image.url}}" height="150" id="hint">
+    <br><br>
+    <input type="file" name="image">
+    <br>
+
+    <br><br>
+    <label>Obecnie nagrane audio:</label>
+    <br>
+    <audio controls>
+        <source src="{{form.instance.sound.url}}" type="audio/mpeg">
+    </audio>
+    <br><br>
+    <label>Nagraj nowe audio: </label>
+    <br>
+    <input type="button" id="recording" value="Start recording...">
+    <input type="button" id="play" class="hidden" value="Play recording...">
+    <a href="#" id="audioDownload" class="hidden">Download</a>
+    <br><br>
+    <label>Dodaj nagrany dźwięk</label>
+    <br><br>
+        <input type="file" name="sound">
+    <br><br>
+
+
+    <input type="submit" value="Update">
+</form>
+
+
+{% endblock %}

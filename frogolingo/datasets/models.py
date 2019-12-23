@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Expression(models.Model):
     reference = models.CharField(max_length=100)
     translation = models.CharField(max_length=100)
-    image = models.FileField(upload_to='images/')
+    image = models.ImageField(upload_to='images/')
     sound = models.FileField(upload_to='sounds/')
     creation_date = models.DateField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

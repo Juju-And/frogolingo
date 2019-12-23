@@ -1,14 +1,16 @@
-from multiprocessing.reduction import register
+import json
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import UpdateView
+
 from datasets.models import Expression, UserStats, UserAnswer
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import View
-from django.views.generic import ListView
 from datasets.forms import ExpressionForm
-import speech_recognition as sr
-import json
-import random
 
 
 class MainView(LoginRequiredMixin, View):
@@ -25,7 +27,7 @@ class AddNewExpressionView(LoginRequiredMixin, View):
         if form.is_valid():
             form.instance.user = self.request.user
             form.save()
-            return redirect('/')
+            return redirect('/all_expressions')
 
     def get(self, request):
         form = ExpressionForm()
@@ -82,17 +84,17 @@ def selectWorstExpressions(user):
         print("a =", a, "b =", b, "procent =", percentageAB)
 
         if percentageAB > 90:
-            color = "perfect"
-        elif percentageAB > 50:
-            color = "notbad"
+            status_color = "perfect"
+        elif percentageAB > 30:
+            status_color = "notbad"
         else:
-            color = "critical"
+            status_color = "critical"
 
         expressions_list.append({"expression": expressions[x],
                                  "percentage": percentageAB,
                                  "correct_answers": b,
                                  "all_answers": a,
-                                 "status_color": color})
+                                 "status_color": status_color})
         expressions_list.sort(key=lambda x: x['percentage'])
 
         # if percentageAB <= percentage:
@@ -106,8 +108,6 @@ def selectWorstExpressions(user):
     return expressions_list
 
 
-
-
 class StatsView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
@@ -119,5 +119,44 @@ class StatsView(LoginRequiredMixin, View):
 class AllExpressionsView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
-        expressions_list = Expression.objects.filter(user=user)
-        return render(request, 'all_espressions.html', {'expressions_list': expressions_list})
+        form = ExpressionForm()
+        if request.GET.get('expression'):
+            expression = request.GET.get('expression')
+            # print(expression)
+            expressions_list = Expression.objects.filter(user=user).filter(
+                Q(translation__icontains=expression) |
+                Q(reference__icontains=expression)).values()
+        else:
+            expressions_list = Expression.objects.filter(user=user)
+        if request.GET.get('order_by'):
+            order = request.GET.get('order_by')
+            expressions_list = expressions_list.order_by(order)
+
+        return render(request, 'all_expressions.html', {'expressions_list': expressions_list,
+                                                        'form': form})
+
+    def post(self, request):
+        form = ExpressionForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.instance.user = self.request.user
+            form.save()
+            return redirect('/all_expressions/')
+
+
+class DeleteExpressionView(View):
+    @csrf_exempt
+    def delete(self, request, expression_id):
+        try:
+            expression = Expression.objects.get(id=expression_id)
+            expression.delete()
+            response = JsonResponse({'Message': 'Product deleted'}, safe=False)
+        except ObjectDoesNotExist:
+            response = JsonResponse({'Message': 'Invalid ID supplied'})
+        return response
+
+
+class EditExpressionView(LoginRequiredMixin, UpdateView):
+    model = Expression
+    fields = ['reference', 'translation', 'image', 'sound', ]
+    template_name = 'edit_expression.html'
+    success_url = '/all_expressions'
