@@ -26,11 +26,13 @@ from datasets.views import (MainView,
                             MessagesView,
                             StatsView,
                             AllExpressionsView,
-                            EditExpressionView
+                            EditExpressionView,
+                            AddExpressionView
                             )
 from learning.views import (TrainingView,
                             LearningView,
-                            NextExpressionsView
+                            NextExpressionsView,
+                            NextExpressionTrainView
                             )
 from users.views import (LoginView,
                          CreateUserView,
@@ -49,8 +51,11 @@ urlpatterns = [
     url(r'^messages', MessagesView.as_view()),
     url(r'^stats', StatsView.as_view()),
     url(r'^all_expressions', AllExpressionsView.as_view()),
+    url(r'^next_expression_train', NextExpressionTrainView.as_view()),
     url(r'^next_expression', NextExpressionsView.as_view()),
     url(r'^edit_expression/(?P<pk>(\d)+)$', EditExpressionView.as_view()),
+
+    url(r'^add_expression', AddExpressionView.as_view()),
 
 ]
 

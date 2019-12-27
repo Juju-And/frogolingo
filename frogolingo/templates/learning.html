@@ -1,21 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h3>Czas na naukę</h3>
+<h3 class="text-muted">Czas na naukę</h3>
 {% csrf_token %}
 
 <!--losowe słowo w języku B-->
 
 
+<div class="card" style="padding: 10px;">
+    <div class="card-block">
 
+        {% csrf_token %}
 
-<div id="next-expression">{% include 'next_expression_learn.html' %}</div>
+<div id="next-expression-learn">{% include 'next_expression_learn.html' %}</div>
 
 
 
 
 <br><br>
-<button type="submit" id="next_expression_learn" class="btn btn-outline-success">Następne</button>
-
+<button type="submit" id="btn_next_learn" class="btn btn-outline-success">Następne</button>
+    </div>
+</div>
 
 {% endblock %}

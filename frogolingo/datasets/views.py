@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView
-
+from django.core.paginator import Paginator
 from datasets.models import Expression, UserStats, UserAnswer
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import View
@@ -120,6 +120,7 @@ class AllExpressionsView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         form = ExpressionForm()
+        output_expressions = []
         if request.GET.get('expression'):
             expression = request.GET.get('expression')
             # print(expression)
@@ -132,7 +133,14 @@ class AllExpressionsView(LoginRequiredMixin, View):
             order = request.GET.get('order_by')
             expressions_list = expressions_list.order_by(order)
 
-        return render(request, 'all_expressions.html', {'expressions_list': expressions_list,
+        if not len(expressions_list) < 5:
+            paginator = Paginator(expressions_list, 5)
+            page = request.GET.get('page')
+            output_expressions = paginator.get_page(page)
+        else:
+            output_expressions = expressions_list
+
+        return render(request, 'all_expressions.html', {'expressions_list': output_expressions,
                                                         'form': form})
 
     def post(self, request):
@@ -160,3 +168,10 @@ class EditExpressionView(LoginRequiredMixin, UpdateView):
     fields = ['reference', 'translation', 'image', 'sound', ]
     template_name = 'edit_expression.html'
     success_url = '/all_expressions'
+
+
+class AddExpressionView(View):
+    @csrf_exempt
+    def get(self, request):
+        form = ExpressionForm(request.POST, request.FILES)
+        return render(request, 'add_expression.html', {'form': form})

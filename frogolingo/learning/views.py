@@ -47,3 +47,11 @@ class NextExpressionsView(View):
         expressions_list = selectWorstExpressions(user)
         random_word = (random.choice(expressions_list))['expression']
         return render(request, 'next_expression_learn.html', {'random_word': random_word})
+
+
+class NextExpressionTrainView(View):
+    def get(self, request):
+        user = request.user
+        expressions_list = selectWorstExpressions(user)
+        random_word = (random.choice(expressions_list))['expression']
+        return render(request, 'next_expression_train.html', {'random_word': random_word})

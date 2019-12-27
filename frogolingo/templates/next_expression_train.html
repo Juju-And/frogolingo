@@ -1,12 +1,23 @@
-<h3 data-translation="{{random_word.translation}}" data-id="{{random_word.id}}" id="reference">{{random_word.reference}}</h3>
+<img src="media/question-mark-2123967_1920.jpg" alt="question-mark" height="150" id="question-mark" class="correct_hide">
+
+
+<img src="/media/{{ random_word.image }}" alt="{{ random_word.image }}" height="150" id="hint"
+     class="hidden correct_show">
+<h3 data-translation="{{random_word.translation}}" data-id="{{random_word.id}}" id="reference">
+    {{random_word.reference}}</h3>
 <audio controls>
     <source src="/media/{{ random_word.sound }}" type="audio/mpeg">
 </audio>
 <br><br>
+<div class="input-group mb-3">
+    <input type="text" id="answer"
+           name="check-expression" class="form-control"
+           placeholder="Odpowiedź" aria-label="Odpowiedź"
+           aria-describedby="basic-addon2">
 
-<label>Odpowiedź:</label>
-<input type="text" id="answer">
+
+</div>
 <br><br>
 <button id="show_pic" class="correct_hide btn btn-outline-secondary">Pokaż podpowiedź...</button>
-<img src="/media/{{ random_word.image }}" alt="{{ random_word.image }}" height="150" id="hint" class="hidden correct_show">
+
 <br><br>

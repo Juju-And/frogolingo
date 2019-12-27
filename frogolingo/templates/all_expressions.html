@@ -3,7 +3,8 @@
 {% block content %}
 
 
-<a class="btn btn-success" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false"
+<a class="btn btn-success float-right" data-toggle="collapse" href="#multiCollapseExample1" role="button"
+   aria-expanded="false"
    aria-controls="multiCollapseExample1">Tworzenie nowego wyrażenia</a>
 
 <div class="row">
@@ -12,26 +13,49 @@
             <div class="card card-body">
                 <form action="/create_expression" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <!--    {{ form.as_p }}-->
-                    <label>Wyrażenie w języku A: </label>
-                    {{ form.reference}}
-                    <br><br>
-                    <label>Wyrażenie w języku B: </label>
-                    {{ form.translation}}
-                    <br><br>
+
+                    <div class="form-group">
+                        <label for="utteranceA">Wyrażenie w języku A:</label>
+                        <input type="text" name="reference" class="form-control" id="utteranceA"
+                               placeholder="Wprowadź słowo"/>
+                        <small id="utteranceAhelp" class="form-text text-muted">Wyrażenie w języku, którego się
+                            uczysz.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="utteranceB">Wyrażenie w języku B:</label>
+                        <input type="text" name="translation" class="form-control" id="utteranceB"
+                               placeholder="Wprowadź słowo"/>
+                        <small id="utteranceBhelp" class="form-text text-muted">Tłumaczenie wyrażenia.</small>
+                    </div>
+
                     <label>Dodaj obrazek dla skojarzeń</label>
-                    {{ form.image}}
+                    <br>
+
+
+                    <!--                    {{ form.image }}-->
+                    <div class="container-fluid">
+                        <div class="custom-file">
+                            <input type="file" name="image" class="custom-file-input addFile" id="pictureFile">
+                            <label class="custom-file-label" for="pictureFile">Wybierz plik</label>
+                        </div>
+                    </div>
+
+
                     <br>
                     <label>Nagraj audio: </label>
-                    <input type="button" class="btn btn-outline-success" id="recording" value="Start recording...">
+                    <input type="button" id="recording" class="btn btn-outline-success" value="Start recording...">
                     <input type="button" id="play" class="hidden btn btn-outline-success" value="Play recording...">
                     <a href="#" id="audioDownload" class="hidden btn btn-outline-success">Download</a>
                     <br><br>
                     <label>Dodaj nagrany dźwięk</label>
-                    {{ form.sound }}
-
-                    <!--    <input type="button" id="audioDownload" class="hidden">-->
-
+                    <!--                    {{ form.sound }}-->
+                    <div class="container-fluid">
+                        <div class="custom-file">
+                            <input type="file" name="sound" class="custom-file-input addFile" id="soundFile">
+                            <label class="custom-file-label" for="soundFile">Wybierz plik</label>
+                        </div>
+                    </div>
                     <br>
 
                     <button type="submit" class="btn btn-outline-success">Dodaj</button>
@@ -43,13 +67,20 @@
 
 
 <br><br>
-<h3>Lista wszystkich dodanych przez Ciebie wyrażeń</h3>
+<h3 class="text-muted">Lista wszystkich dodanych przez Ciebie wyrażeń</h3>
 <br>
 <form action="">
-    <input name="expression" id="input-show-expression" type="text">
-    <input id="btn-show-expression " class="input-button" type="submit" value="Szukaj">
-</form>
+    <div class="input-group mb-3">
 
+        <input type="text" name="expression" id="input-show-expression" class="form-control"
+               placeholder="Szukane wyrażenie" aria-label="Szukane wyrażenie"
+               aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <input id="btn-show-expression " class="input-button btn btn-outline-success" type="submit" value="Szukaj">
+        </div>
+
+    </div>
+</form>
 
 <br><br>
 
@@ -90,6 +121,42 @@
     </tr>
     {% endfor %}
 </table>
+
+
+<!--<nav aria-label="Page navigation example">-->
+<!--  <ul class="pagination">-->
+<!--      {% if expressions_list.has_previous %}-->
+<!--      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>-->
+<!--      <li class="page-item"><a class="page-link" href="?page={{ expressions_list.previous_page_number }}">Poprzednia</a></li>-->
+<!--      {% endif %}-->
+
+<!--&lt;!&ndash;    <li class="page-item"><a class="page-link" href="?page={{ expressions_list.previous_page_number }}">{{ expressions_list.previous_page_number }}</a></li>&ndash;&gt;-->
+
+<!--      {% if expressions_list.has_next %}-->
+<!--    <li class="page-item"><a class="page-link" href="?page={{ expressions_list.next_page_number }}">Następna</a></li>-->
+<!--    <li class="page-item"><a class="page-link" href="?page={{ expressions_list.paginator.num_pages }}">Ostatnia</a></li>-->
+<!--      {% endif %}-->
+<!--  </ul>-->
+<!--</nav>-->
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if expressions_list.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ expressions_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ expressions_list.number }} of {{ expressions_list.paginator.num_pages }}.
+        </span>
+
+        {% if expressions_list.has_next %}
+            <a href="?page={{ expressions_list.next_page_number }}">next</a>
+            <a href="?page={{ expressions_list.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 
 
 {% endblock %}

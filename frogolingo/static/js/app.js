@@ -25,17 +25,14 @@ const stop = () =>
       audioDownload.attr('href', audioUrl);
       resolve({ audioBlob, audioUrl, play, audioDownload});
 
-//      var file = new File([audioBlob], audioUrl+'.mp3')
 
       audioDownload.download = audioUrl + '.mp3';
-//      audioDownload.innerHTML = 'download';
       audioDownload.removeClass("hidden")
-//      document.body.appendChild(audioDownload);
 
     });
 
     mediaRecorder.stop();
-
+console.log("nagrane audio")
   });
 
 
@@ -72,7 +69,7 @@ function nextExpressionLearn() {
             url: "http://127.0.0.1:8000/next_expression/",
             type: "GET",
         }).done(function(response) {
-          var div = $("#next-expression")
+          var div = $("#next-expression-learn")
           div.html(response)
             console.log('odpowiedź przesłana')
         }).fail(function(xhr,status,err) {
@@ -81,21 +78,14 @@ function nextExpressionLearn() {
 }
 
 function nextExpressionTrain() {
-        console.log("create post is working!") // sanity check
-        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-
-//    console.log($('#product-name').val())
+        console.log("create get is working!") // sanity check
         $.ajax({
-            url: "http://127.0.0.1:8000/next_expression/",
-            type: "POST",
-            headers:{
-            "X-CSRFToken": csrftoken
-            },
-            dataType: "json"
+            url: "http://127.0.0.1:8000/next_expression_train/",
+            type: "GET",
         }).done(function(response) {
-          var div = $("#next-expression-train")
+          var div = $("#next-expression-train-div")
           div.html(response)
-            console.log('odpowiedź przesłana')
+           console.log('odpowiedź przesłana')
         }).fail(function(xhr,status,err) {
         }).always(function(xhr,status) {
         });
@@ -169,7 +159,8 @@ $(function() {
 
         $('#show_pic').click(function(){
             console.log("kliknięty!")
-            $('#show_pic').addClass("hidden")
+//            $('#show_pic').addClass("hidden")
+            $('#question-mark').addClass("hidden")
             $('#hint').removeClass("hidden")
         })
 
@@ -194,11 +185,11 @@ $(function() {
             }
             saveAnswer(answer, expression_id);
         })
-        $('#next_expression_train').click(function(){
+        $('#btn_next_train').click(function(){
             nextExpressionTrain()
         })
 
-        $('#next_expression_learn').click(function(){
+        $('#btn_next_learn').click(function(){
             nextExpressionLearn()
         })
 
@@ -215,7 +206,7 @@ $(function() {
             console.log(x, expression_id)
         })
 
-        //        // Usuwanie pojedyńczego wydatku
+        //        // Usuwanie pojedyńczego rekordu
         $('body').on("click", '.btn-delete', function(event){
             event.preventDefault()
             // łapię kliknięty element
@@ -226,12 +217,15 @@ $(function() {
             if (expression_href !== undefined && confirm("Serio?")){
                 deleteExpression(expression_href)
             }
-
-
-
 //            console.log(productId) // sanity check
         })
 
-
+        $('.addFile').on('change',function(){
+                //get the file name
+                var fileName = $(this).val();
+                var cleanFileName = fileName.replace('C:\\fakepath\\', " ");
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(cleanFileName);
+            })
 
 })

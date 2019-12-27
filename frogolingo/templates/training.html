@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h3>Czas na ćwiczenia!</h3>
-{% csrf_token %}
+<!--<div class="col-md-4 col-lg-10">-->
 
-<!--losowe słowo w języku B-->
-<h5>Co oznacza słowo:</h5>
-
-<div id="next-expression-train">{% include 'next_expression_train.html' %}</div>
+<h3 class="text-muted">Podaj znaczenie słowa/wyrażenia</h3>
 
 
-<button type="submit" id="submit_answer" class="correct_hide btn btn-outline-success">Sprawdź</button>
-<button type="submit" id="next_expression_train" class="hidden correct_show btn btn-outline-success">Następne</button>
+<div class="card" style="padding: 10px;">
+    <div class="card-block">
 
+        {% csrf_token %}
 
+        <div id="next-expression-train-div">{% include 'next_expression_train.html' %}</div>
+
+        <button type="submit" id="submit_answer" class="input-button btn btn-outline-success">Sprawdź</button>
+
+        <button type="submit" id="btn_next_train" class="correct_show btn btn-outline-success float-right">
+            Następne
+        </button>
+
+    </div>
+</div>
+
+<!--</div>-->
 {% endblock %}
